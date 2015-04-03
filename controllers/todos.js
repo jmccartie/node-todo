@@ -1,3 +1,4 @@
+var models  = require('../models');
 var express = require('express');
 var router = express.Router();
 
@@ -9,14 +10,13 @@ router.get('/', function(req, res, next) {
 
 // router.route('/todos/:id').get(function(req, res) {
 router.get('/:id', function(req, res, next) {
-  todo = req.models.todo.get(req.params.id, function (err, todo) {
-    if (err) {
-      return res.send(err);
+  models.Todo.findOne(req.params.id).then(function(todo) {
+    if (todo == null) {
+      res.status(404).send('Not found');
+    } else {
+      res.send(todo.title);
     }
-
-    res.send(todo.title);
-  });
-
+  })
 });
 
 module.exports = router;

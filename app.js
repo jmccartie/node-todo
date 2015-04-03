@@ -23,19 +23,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// DB
-app.use(orm.express("postgres://jmccartie@localhost/nodetodos", {
-    define: function (db, models, next) {
-        models.todo = db.define("todos", {
-            id        : Number,
-            title   : String,
-            created_at       : Date,
-            updated_at       : Date
-        });
-        next();
-    }
-}));
-
 app.use('/', index);
 app.use('/todos', todos);
 
