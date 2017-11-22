@@ -10,10 +10,25 @@ var config    = require(__dirname + '/../config/config.json')[env];
 
 if (env == "production") {
     // the application is executed on Heroku ... use the postgres database
-    var sequelize = new Sequelize(process.env.DATABASE_URL, {
-      dialect:  'postgres',
-      logging:  true
-    })
+    var match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/);
+
+    config = {
+        user: match[1],
+        pass: match[2],
+        base: match[5],
+        options: {
+            dialect: 'postgres',
+            protocol: 'postgres',
+            host: match[3],
+            logging: false,
+            port: match[4],
+            dialectOptions: {
+                ssl: true
+            }
+        }
+    };
+
+    var sequelize = new Sequelize(config.base, config.user, config.pass, config.options);
 } else {
   var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
