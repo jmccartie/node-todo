@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var models = require("../models");
+var app = require('./app');
+var models = require("./models");
 var debug = require('debug')('todo:server');
 var http = require('http');
 
